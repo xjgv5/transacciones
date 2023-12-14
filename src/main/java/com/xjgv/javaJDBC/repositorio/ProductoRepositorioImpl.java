@@ -53,21 +53,22 @@ public class ProductoRepositorioImpl implements Repositorio<Producto> {
     public void guardar(Producto producto) {
         String sql;
         if (producto.getId() != null  && producto.getId() > 0) {
-            sql = "UPDATE productos SET nombre=? precio=? categoria_id=? WHERE id=?";
+            sql = "UPDATE productos SET nombre=? precio=? categoria_id=?, sku=? WHERE id=?";
         } else {
-            sql = "INSERT INTO productos(nombre, precio, categoria_id, fecha_registro) VALUES (?,?, ?, ?)";
+            sql = "INSERT INTO productos(nombre, precio, categoria_id, sku, fecha_registro) VALUES (?,?, ?, ?, ?)";
 
         }
         try(PreparedStatement statement = obtenerConexion().prepareStatement(sql)){
             statement.setString(1, producto.getNombre());
             statement.setLong(2, producto.getPrecio());
             statement.setLong(3, producto.getCategoria().getId());
+            statement.setString(4, producto.getSku());
 
             if (producto.getId() != null && producto.getId() > 0) {
-                statement.setLong(4, producto.getId());
+                statement.setLong(5, producto.getId());
             }
             else {
-                statement.setDate(4, new Date(producto.getFechaRegistro().getTime()));
+                statement.setDate(5, new Date(producto.getFechaRegistro().getTime()));
 
             }
 
@@ -75,7 +76,6 @@ public class ProductoRepositorioImpl implements Repositorio<Producto> {
         }catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Producto creado con exito");
     }
 
     @Override
@@ -95,6 +95,7 @@ public class ProductoRepositorioImpl implements Repositorio<Producto> {
         p.setNombre(resultado.getString("nombre"));
         p.setPrecio(resultado.getInt("precio"));
         p.setFechaRegistro(resultado.getDate("fecha_registro"));
+        p.setSku(resultado.getString("sku"));
         Categoria categoria = new Categoria();
         categoria.setId(resultado.getLong("categoria_id"));
         categoria.setNombre(resultado.getString("categoria"));

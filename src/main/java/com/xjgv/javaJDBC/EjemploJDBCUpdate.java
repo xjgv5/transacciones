@@ -6,10 +6,11 @@ import com.xjgv.javaJDBC.repositorio.ProductoRepositorioImpl;
 import com.xjgv.javaJDBC.repositorio.Repositorio;
 import com.xjgv.javaJDBC.util.ConexionBaseDatos;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 
-public class EjemploJDBC {
+public class EjemploJDBCUpdate {
     public static void main(String[] args) {
 
         try(Connection conection = ConexionBaseDatos.getInstance()) {
@@ -21,9 +22,9 @@ public class EjemploJDBC {
             System.out.println("********************** Obtener por ID **********************");
             System.out.println(repositorio.porId(1L));
 
-            System.out.println("********************** Crear objeto ID **********************");
+            System.out.println("********************** Editar objeto ID **********************");
             Producto producto = new Producto();
-            //producto.setId(5L);
+            producto.setId(5L);
             producto.setNombre("Teclado Razer Mecánico");
             producto.setPrecio(550);
             producto.setFechaRegistro(new Date());
